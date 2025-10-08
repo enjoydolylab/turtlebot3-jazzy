@@ -27,6 +27,36 @@
   - [Docker](https://www.docker.com/)
   - [Docker Compose](https://docs.docker.com/compose/install/)
 
+### Dockerのインストール (Ubuntuの場合)
+
+Dockerが未インストールの場合、以下の手順でインストールしてください。
+
+1.  **Docker公式リポジトリをセットアップします。**
+
+    ```bash
+    # パッケージリストを更新し、必要なツールをインストール
+    sudo apt update
+    sudo apt install -y ca-certificates curl gnupg
+
+    # Dockerの公式GPGキーを追加
+    sudo install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+    # リポジトリを設定
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    ```
+
+2.  **Docker Engineをインストールします。**
+
+    ```bash
+    sudo apt update
+    sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    ```
+
 -----
 
 ## 使い方
@@ -46,6 +76,15 @@ mkdir -p ros_ws/src
 ```bash
 docker compose up --build -d
 ```
+
+> **Permission Deniedエラーが出る場合**
+> 上記コマンドで`permission denied`というエラーが表示された場合は、Dockerの実行権限がありません。以下の`sudo`を付けたコマンドを実行してください。
+>
+> ```bash
+> sudo docker compose up --build -d
+> ```
+>
+> もしくは、前述の「`sudo`なしでDockerを実行する設定」を行うことを推奨します。
 
 #### 3\. コンテナへのアクセス
 
@@ -118,9 +157,9 @@ TurtleBot3のモデルやROSのドメインIDなどの設定は、`docker-compos
 
 ```
 .
-├── docker-compose.yml   # コンテナの構成ファイル
-├── Dockerfile           # Dockerイメージの設計図
-├── README.md            # このファイル
+├── docker-compose.yml      # コンテナの構成ファイル
+├── Dockerfile              # Dockerイメージの設計図
+├── README.md               # このファイル
 └── ros_ws/
-    └── src/             # ⬅ 開発するROSパッケージをここに置く
+    └── src/                # ⬅ 開発するROSパッケージをここに置く
 ```
