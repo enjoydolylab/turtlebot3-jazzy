@@ -1,0 +1,30 @@
+# docker-compose.yml
+# turtlebot3 ROS2 Jazzyの最小構成用
+
+services:
+  turtlebot3:
+    # ------------------- ビルド設定 -------------------
+    build:
+      # Dockerfileがあるディレクトリのパス
+      context: .
+    image: turtlebot3-jazzy-base
+    # ------------------- ボリューム設定 ---------------
+    volumes:
+      - ./ros_ws/src:/root/ros2_ws/src
+    # ------------------- 実行設定 -------------------
+    # コンテナに名前をつける
+    container_name: turtlebot3-jazzy
+    # ROS 2の通信のためにホストのネットワークを共有する
+    network_mode: "host"
+    # モーター制御などのためにデバイスへのフルアクセスを許可する
+    privileged: true
+    # TurtleBot3が再起動した際などに、コンテナも自動で再起動する
+    restart: unless-stopped
+    # ------------------- 環境変数 -------------------
+    environment:
+      - "TURTLEBOT3_MODEL=burger"
+      - "LDS_MODEL=LDS-02"
+      - "ROS_DOMAIN_ID=30" # ROS 2の通信ドメインIDを設定
+    # ------------------- その他 -------------------
+    # コンテナを常に起動した状態に保つ
+    tty: true
