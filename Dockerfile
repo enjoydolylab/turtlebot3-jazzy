@@ -54,6 +54,7 @@ WORKDIR /ros2_ws
 RUN git clone -b jazzy https://github.com/ROBOTIS-GIT/turtlebot3_msgs.git src/turtlebot3_msgs
 RUN git clone -b jazzy https://github.com/ROBOTIS-GIT/DynamixelSDK.git src/DynamixelSDK
 RUN git clone -b jazzy https://github.com/ROBOTIS-GIT/turtlebot3.git src/turtlebot3
+RUN git clone -b jazzy https://github.com/ROBOTIS-GIT/ld08_driver.git src/ld08_driver
 
 # ROSの環境設定を読み込み、依存関係をインストールし、ビルドを実行
 # ros-baseイメージではrosdep initが未実行のため `rosdep init || true` を挟んで安定化
