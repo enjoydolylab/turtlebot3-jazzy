@@ -18,6 +18,7 @@
       - `turtlebot3`
       - `turtlebot3_msgs`
       - `DynamixelSDK`
+      - `ld08_driver`
   - **開発対応**: `volumes`設定により、ホストPCでのソースコード編集が即座にコンテナへ反映
 
 -----
@@ -57,6 +58,15 @@ Dockerが未インストールの場合、以下の手順でインストール�
     sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     ```
 
+3.  **(推奨) `sudo`なしでDockerを実行する設定**
+    毎回`sudo`を付ける手間を省くため、現在のユーザーを`docker`グループに追加します。
+
+    ```bash
+    sudo usermod -aG docker ${USER}
+    ```
+
+    **設定を反映させるために、一度PCを再起動するか、再ログインしてください。**
+
 -----
 
 ## 使い方
@@ -83,6 +93,8 @@ docker compose up --build -d
 > ```bash
 > sudo docker compose up --build -d
 > ```
+>
+> もしくは、前述の「`sudo`なしでDockerを実行する設定」を行うことを推奨します。
 
 #### 3\. コンテナへのアクセス
 

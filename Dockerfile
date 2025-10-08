@@ -13,6 +13,7 @@
 #     - turtlebot3
 #     - turtlebot3_msgs
 #     - DynamixelSDK
+#     - ld08_driver
 #
 # ■ 含まれないもの と 用途
 #   以下のパッケージは、軽量化のため意図的に「含んでいません」。
