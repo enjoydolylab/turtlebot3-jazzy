@@ -83,8 +83,6 @@ docker compose up --build -d
 > ```bash
 > sudo docker compose up --build -d
 > ```
->
-> もしくは、前述の「`sudo`なしでDockerを実行する設定」を行うことを推奨します。
 
 #### 3\. コンテナへのアクセス
 
