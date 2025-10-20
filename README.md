@@ -73,7 +73,7 @@ Dockerが未インストールの場合、以下の手順でインストール�
 ## 使い方
 
 #### 1\. リポジトリのクローン
-`このリポジトリをクローンします
+このリポジトリをクローンします
 
 ```bash
 git clone https://github.com/enjoydolylab/turtlebot3-jazzy.git
