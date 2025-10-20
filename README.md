@@ -28,6 +28,7 @@
   - [Docker](https://www.docker.com/)
   - [Docker Compose](https://docs.docker.com/compose/install/)
 
+
 ### Dockerのインストール (Ubuntuの場合)
 
 Dockerが未インストールの場合、以下の手順でインストールしてください。
@@ -71,15 +72,23 @@ Dockerが未インストールの場合、以下の手順でインストール�
 
 ## 使い方
 
-#### 1\. ワークスペース用ディレクトリの作成
+#### 1\. リポジトリのクローン
+`このリポジトリをクローンします
+
+```bash
+git clone https://github.com/sht621/turtlebot3-jazzy.git
+```
+
+#### 2\. ワークスペース用ディレクトリの作成
 
 `docker-compose.yml`で設定しているボリュームマウントのために、ホストPC側にソースコードを配置するディレクトリを作成します。（このプロジェクトのルートディレクトリで実行してください）
 
 ```bash
+cd turtlebot3-jazzy
 mkdir -p ros_ws/src
 ```
 
-#### 2\. コンテナのビルドと起動
+#### 3\. コンテナのビルドと起動
 
 以下のコマンドを実行すると、`Dockerfile`を基にDockerイメージがビルドされ、コンテナがバックグラウンドで起動します。
 
@@ -96,7 +105,7 @@ docker compose up --build -d
 >
 > もしくは、前述の「`sudo`なしでDockerを実行する設定」を行うことを推奨します。
 
-#### 3\. コンテナへのアクセス
+#### 4\. コンテナへのアクセス
 
 起動したコンテナの中に入るには、以下のコマンドを実行します。
 
@@ -106,7 +115,7 @@ docker compose exec turtlebot3 bash
 
 コンテナ内では、ROS 2の環境変数が自動的に読み込まれる設定になっています。
 
-#### 4\. TurtleBot3の起動
+#### 5\. TurtleBot3の起動
 
 コンテナ内で以下のコマンドを実行すると、TurtleBot3が起動します。
 
@@ -166,7 +175,7 @@ TurtleBot3のモデルやROSのドメインIDなどの設定は、`docker-compos
 ## ディレクトリ構成
 
 ```
-.
+turtlebot3-jazzy
 ├── docker-compose.yml      # コンテナの構成ファイル
 ├── Dockerfile              # Dockerイメージの設計図
 ├── README.md               # このファイル
