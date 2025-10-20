@@ -76,7 +76,7 @@ Dockerが未インストールの場合、以下の手順でインストール�
 `このリポジトリをクローンします
 
 ```bash
-git clone https://github.com/sht621/turtlebot3-jazzy.git
+git clone https://github.com/enjoydolylab/turtlebot3-jazzy.git
 ```
 
 #### 2\. ワークスペース用ディレクトリの作成
