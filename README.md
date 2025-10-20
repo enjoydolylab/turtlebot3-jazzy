@@ -81,7 +81,7 @@ git clone https://github.com/enjoydolylab/turtlebot3-jazzy.git
 
 #### 2\. ワークスペース用ディレクトリの作成
 
-`docker-compose.yml`で設定しているボリュームマウントのために、ホストPC側にソースコードを配置するディレクトリを作成します。（このプロジェクトのルートディレクトリで実行してください）
+`docker-compose.yml`で設定しているボリュームマウントのために、ホストPC側にソースコードを配置するディレクトリを作成します。
 
 ```bash
 cd turtlebot3-jazzy
