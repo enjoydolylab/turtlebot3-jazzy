@@ -1,0 +1,40 @@
+services:
+  turtlebot3-jazzy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # ホストのユーザーIDを渡して、コンテナ内のユーザーIDと一致させる
+      args:
+        USER_UID: 1000
+        USER_GID: 1000
+    
+    image: turtlebot3-jazzy-image
+    container_name: turtlebot3-jazzy-container
+    
+    # ------------------- ネットワーク & デバイス -------------------
+    network_mode: host
+    # 全デバイスへのフルアクセス権限を付与
+    privileged: true
+    
+    # GUI (X11) 表示用設定
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - TURTLEBOT3_MODEL=burger
+      - LDS_MODEL=LDS-02
+      - ROS_DOMAIN_ID=30
+
+    volumes:
+      # ワークスペースのマウント (ユーザー名は user)
+      - ./ros_ws/src:/home/user/ros2_ws/src
+      # GUI用のソケットマウント
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      # 全デバイスへのアクセスのため /dev をマウント
+      - /dev:/dev
+
+    # コンテナが停止しないようにする
+    stdin_open: true
+    tty: true
+    
+    # 再起動ポリシー
+    restart: unless-stopped

@@ -1,44 +1,56 @@
-# =================================================================
-#            TurtleBot3用 ROS 2 Jazzy 最小構成イメージ
-# =================================================================
-# -----------------------------------------------------------------
-# 作成者: 菅 匠汰
-# 更新日: 2025/10/07
-# -----------------------------------------------------------------
+FROM ros:jazzy-desktop
 
-# ベースイメージとしてROS 2 Jazzyを選択
-FROM ros:jazzy-ros-base
-
-# Dockerビルド時の対話を無効化
+# ビルド時の対話を無効化
 ENV DEBIAN_FRONTEND=noninteractive
 
-# TurtleBot3の動作とビルドに最低限必要なパッケージのみインストール
+# -----------------------------------------------------------------
+# 1. 基本ツールとROS 2パッケージのインストール
+# -----------------------------------------------------------------
 RUN apt-get update && apt-get install -y \
+    # 基本ツール
     git \
     python3-rosdep \
+    python3-colcon-common-extensions \
+    vim \
+    wget \
+    # USB/Video/Camera Tools
+    v4l-utils \
+    usbutils \
+    # TurtleBot3 Packages (aptでインストール)
+    ros-jazzy-turtlebot3 \
+    # 追加: カメラ・画像関連
+    ros-jazzy-v4l2-camera \
+    ros-jazzy-image-transport \
+    ros-jazzy-image-transport-plugins \
+    ros-jazzy-rqt-image-view \
     && rm -rf /var/lib/apt/lists/*
 
-# ROS 2ワークスペースのセットアップ
-WORKDIR /ros2_ws
+# -----------------------------------------------------------------
+# 2. ユーザー設定 (GUIアプリケーション用)
+# -----------------------------------------------------------------
+# ホストOSのユーザーIDと一致させるための引数
+ARG USERNAME=user
+ARG USER_UID=1000
+ARG USER_GID=1000
 
-# TurtleBot3関連のリポジトリを Jazzy ブランチでクローン
-RUN git clone -b jazzy https://github.com/ROBOTIS-GIT/turtlebot3_msgs.git src/turtlebot3_msgs
-RUN git clone -b jazzy https://github.com/ROBOTIS-GIT/DynamixelSDK.git src/DynamixelSDK
-RUN git clone -b jazzy https://github.com/ROBOTIS-GIT/turtlebot3.git src/turtlebot3
-RUN git clone -b jazzy https://github.com/ROBOTIS-GIT/ld08_driver.git src/ld08_driver
+# ユーザーを作成し、sudo権限を付与
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && apt-get update \
+    && apt-get install -y sudo \
+    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
 
-# ROSの環境設定を読み込み、依存関係をインストールし、ビルドを実行
-# ros-baseイメージではrosdep initが未実行のため `rosdep init || true` を挟んで安定化
-RUN . /opt/ros/jazzy/setup.sh && \
-    apt-get update && \
-    rosdep init || true && \
-    rosdep update && \
-    rosdep install -i --from-path src --rosdistro jazzy -y && \
-    colcon build
+# -----------------------------------------------------------------
+# 3. 環境設定
+# -----------------------------------------------------------------
+# 一般ユーザーに切り替え
+USER $USERNAME
+WORKDIR /home/$USERNAME/ros2_ws
 
-# コンテナ起動時にROS環境を自動でセットアップするための設定
+# ROS環境の自動読み込み設定
+# .bashrc に追記して永続化
 RUN echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc && \
-    echo "source /ros2_ws/install/setup.bash" >> ~/.bashrc
+    echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc
 
-# デフォルトのコマンドとしてbashを起動
 CMD ["/bin/bash"]
