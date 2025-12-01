@@ -1,9 +1,8 @@
 # =================================================================
 #             TurtleBot3 ROS 2 Jazzy Desktop Image
 # =================================================================
-# Base Image: osrf/ros:jazzy-desktop
-# Desktop版は osrf/ros リポジトリで提供されています
-FROM osrf/ros:jazzy-desktop
+# Base Image: ros:jazzy-ros-base
+FROM ros:jazzy-ros-base
 
 # ビルド時の対話を無効化
 ENV DEBIAN_FRONTEND=noninteractive
@@ -21,9 +20,11 @@ RUN apt-get update && apt-get install -y \
     # USB/Video/Camera Tools
     v4l-utils \
     usbutils \
+    # ROS 2 Desktop (GUIツールなどを含む)
+    ros-jazzy-desktop \
     # TurtleBot3 Packages (aptでインストール)
     ros-jazzy-turtlebot3 \
-    # 追加リクエスト: カメラ・画像関連
+    # 追加: カメラ・画像関連
     ros-jazzy-v4l2-camera \
     ros-jazzy-image-transport \
     ros-jazzy-image-transport-plugins \
